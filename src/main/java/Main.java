@@ -17,7 +17,8 @@ public class Main {
     }
 
     private static void processContent(List<String> file) {
-        LexicalProcessor.interact(file);
+        LexicalProcessor lexicalProcessor = new LexicalProcessor();
+        lexicalProcessor.interact(file);
     }
 
     private static void openArchive(String fileName) {
