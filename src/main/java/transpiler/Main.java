@@ -1,4 +1,6 @@
-import processors.LexicalProcessor;
+package transpiler;
+
+import transpiler.processors.LexicalProcessor;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -33,11 +35,11 @@ public class Main {
         List<String> content = new ArrayList<>();
         try {
             while (fileContent.hasNext()) {
-                String a = fileContent.nextLine();
-                if (a == null) {
-                    return null;
+                String line = fileContent.nextLine();
+                if (line == null) {
+                    return new ArrayList<>();
                 }
-                content.add(a);
+                content.add(line);
             }
         } catch (Exception err) {
             System.err.println("Error " + err);

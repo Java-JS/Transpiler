@@ -1,4 +1,4 @@
-package model;
+package transpiler.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

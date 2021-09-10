@@ -1,4 +1,4 @@
-package processors;
+package transpiler.processors;
 
 import java.util.List;
 
@@ -8,14 +8,14 @@ public class LexicalProcessor {
     private int lineCharPos;
     private static boolean errors = false;
 
-    public String interact(List<String> JAVA_FILE) {
+    public String interact(List<String> javaFile) {
 
-        if (JAVA_FILE == null) {
+        if (javaFile == null) {
             System.err.println("ERRO! Não há entradas válidas.");
             return null;
         }
 
-        for (String line : JAVA_FILE) {
+        for (String line : javaFile) {
             System.out.println(line);
 
             System.out.println("LINE: " + line);
