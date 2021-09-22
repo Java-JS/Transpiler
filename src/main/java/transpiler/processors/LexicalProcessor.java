@@ -1,42 +1,28 @@
 package transpiler.processors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LexicalProcessor {
 
-    StringBuilder phraseBuilder = new StringBuilder();
-    private int lineCharPos;
-    private static boolean errors = false;
-
-    public String interact(List<String> javaFile) {
+    public void interact(List<String> javaFile) {
 
         if (javaFile == null) {
             System.err.println("ERRO! Não há entradas válidas.");
-            return null;
+            return;
         }
 
         for (String line : javaFile) {
-            System.out.println(line);
+            line = line.trim();
 
-            System.out.println("LINE: " + line);
+            System.out.println("\nLINE: " + line);
 
-            while (lineCharPos < line.length()) {
-                String word = interactingLine(line);
-
-                System.out.println("WORD: " + word);
-                System.out.println("POS: " + lineCharPos);
-
-
-                phraseBuilder.append("[FRAG: ").append("( ").append(dictionary(word)).append(" )").append("] ");
-                lineCharPos++;
-            }
+            interactOverLine(line).forEach(word -> {
+//                System.out.println("return interact over line: " + word);
+                System.out.println("[FRAG: " + dictionary(word) + "=" + word + " ] " + "\n");
+            });
         }
-
-        System.out.println("Algum erro? " + (errors ? "Sim" : "Não"));
-
-        return String.valueOf(phraseBuilder);
     }
-
 
     private static String dictionary(String word) {
 
@@ -46,76 +32,84 @@ public class LexicalProcessor {
         switch (word) {
             case "(":
             case ")":
-                return "parenthesis: " + word;
+                return "parenthesis";
+
+            case "{":
+            case "}":
+                return "curly-brackets";
+
             case ";":
-                return "semicolon: " + word;
+                return "semicolon";
+
             case "imp":
             case "while":
             case "print":
             case "if":
             case "else":
-                return "command: " + word;
+                return "command";
+
+            case "System.out.println":
+                return "print";
+
+            case "public static void main":
+                return "acessor-modifier";
+
             case "int":
-            case "float":
-            case "string":
+            case "Int":
+            case "Float":
+            case "String":
+            case "String[]":
             case "boolean":
-                return "type: " + word;
+            case "Boolean":
+                return "type";
+
             case "*":
             case "+":
             case "/":
             case "-":
-                return "operation: " + word;
+                return "operation";
+
             default:
-                warning("UNEXPECTED " + word);
-                return "unexpected: " + word;
+                return "unexpected";
         }
     }
 
 
-    public String interactingLine(String line) {
+    public List<String> interactOverLine(String line) {
+
+        List<String> result = new ArrayList<>();
+
         StringBuilder temp = new StringBuilder();
         boolean special = false;
-//        boolean insideParentheses = false;
 
-        while (lineCharPos < line.length()) {
-//            if (line.charAt(lineCharPos) == ' ') {
-//                warning("SPACE");
-//                special = true;
-//            }
+        for (int charPos = 0; charPos < line.length(); charPos++) {
+            temp.append(line.charAt(charPos));
 
-            if (line.charAt(lineCharPos) == '(') {
-//                warning("PARENTHESIS");
-//                insideParentheses = true;
-                special = true;
-            }
-
-            if (line.charAt(lineCharPos) == ')') {
-//                warning("PARENTHESIS");
-//                insideParentheses = false;
-                special = true;
+            switch (line.charAt(charPos)) {
+                case '{':
+                case '}':
+                case ' ':
+                case ';':
+                case '(':
+                case ')':
+                    special = true;
+                    break;
+                default:
+                    break;
             }
 
 
-            if (line.charAt(lineCharPos) == ';') {
-//                warning("SEMICOLON");
-                special = true;
+//            System.out.println(dictionary(String.valueOf(temp)));
+//            System.out.println("palavra =" + temp);
+            if (special && !"unexpected".equals(dictionary(String.valueOf(temp)))) {
+//                System.out.println("Palavra existe no dicionário =" + temp);
+
+                result.add(String.valueOf(temp));
+                temp = new StringBuilder();
+                special = false;
             }
 
-            if (temp.length() > 0 && special) {
-                lineCharPos--;
-                return String.valueOf(temp);
-            }
-
-            temp.append(line.charAt(lineCharPos));
-            lineCharPos++;
         }
-        return String.valueOf(temp);
-    }
-
-
-
-    private static void warning(String message) {
-        System.err.println("ERROR! " + message);
-        errors = true;
+        return result;
     }
 }
