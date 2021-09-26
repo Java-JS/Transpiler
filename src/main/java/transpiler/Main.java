@@ -35,11 +35,6 @@ public class Main {
         List<String> content = new ArrayList<>();
         try {
             while (fileContent.hasNext()) {
-/*                String line = fileContent.nextLine();
-                if (line == null) {
-                    return new ArrayList<>();
-                }
-                content.add(line);*/
                 content.add(fileContent.nextLine());
             }
         } catch (Exception err) {
