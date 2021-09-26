@@ -23,7 +23,6 @@ public class LexicalProcessor {
             System.out.println("\nLINE: " + line);
 
             interactOverLine(line).forEach(word -> {
-//                System.out.println("return interact over line: " + word);
                 System.out.println("[FRAG: " + dictionary(word) + "=" + word + " ] ");
                 lexemes.add(("[FRAG: " + dictionary(word) + "=" + word + " ] "));
             });
@@ -123,42 +122,26 @@ public class LexicalProcessor {
             temp.append(line.charAt(charPos));
 
             if (!UNEXPECTED.equals(dictionary(String.valueOf(temp).trim()))) {
-
-//                if (dictionary(String.valueOf(temp).trim()).equals("type") && dictionary(String.valueOf(line.charAt(getNextValidCharacter(charPos, line)))).equals("square-brackets")) {
-//
-//                } else {
-
                 result.add(String.valueOf(temp).trim());
-
                 temp = new StringBuilder();
-//                }
+
             } else if (!result.isEmpty() && result.get(result.size() - 1).equals(CLASS) && temp.length() > 1
                     && (line.charAt(charPos) == '{' || line.charAt(charPos) == ' ')) {
                 result.add(String.valueOf(temp.substring(0, temp.length() - 1)).trim());
                 temp = new StringBuilder();
+
                 if (line.charAt(charPos) == '{')
                     result.add("{");
             } else if (specialCase && (line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
                 if (line.charAt(charPos) == ')') {
                     charPos--;
                 }
+
                 result.add(String.valueOf(temp).trim());
                 temp = new StringBuilder();
                 specialCase = false;
             }
-
         }
         return result;
-    }
-
-    private int getNextValidCharacter(int charPos, String line) {
-
-        for (; charPos < line.length(); charPos++) {
-
-            if (line.charAt(charPos) != ' ') {
-                return charPos;
-            }
-        }
-        return charPos;
     }
 }
