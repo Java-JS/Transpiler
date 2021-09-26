@@ -10,11 +10,11 @@ public class LexicalProcessor {
     boolean specialCase = false;
     private List<String> lexemes = new ArrayList<>();
 
-    public void interact(List<String> javaFile) {
+    public List<String> interact(List<String> javaFile) {
 
         if (javaFile == null) {
             System.err.println("ERRO! Não há entradas válidas.");
-            return;
+            return new ArrayList<>();
         }
 
         for (String line : javaFile) {
@@ -27,6 +27,7 @@ public class LexicalProcessor {
                 lexemes.add(("[FRAG: " + dictionary(word) + "=" + word + " ] "));
             });
         }
+        return lexemes;
     }
 
     private String dictionary(String word) {
