@@ -12,7 +12,7 @@ public class Main {
     private static Scanner fileContent;
 
     public static void main(String[] args) {
-        String fileName = "Java-Simple";
+        String fileName = "HelloWorld";
         openArchive(fileName);
         processContent(readFile());
         closeArchive();

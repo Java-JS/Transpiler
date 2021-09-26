@@ -3,7 +3,12 @@ package transpiler.processors;
 import java.util.ArrayList;
 import java.util.List;
 
+import static transpiler.constants.Constants.CLASS;
+import static transpiler.constants.Constants.UNEXPECTED;
+
 public class LexicalProcessor {
+    boolean specialCase = false;
+    private List<String> lexemes = new ArrayList<>();
 
     public void interact(List<String> javaFile) {
 
@@ -19,97 +24,141 @@ public class LexicalProcessor {
 
             interactOverLine(line).forEach(word -> {
 //                System.out.println("return interact over line: " + word);
-                System.out.println("[FRAG: " + dictionary(word) + "=" + word + " ] " + "\n");
+                System.out.println("[FRAG: " + dictionary(word) + "=" + word + " ] ");
+                lexemes.add(("[FRAG: " + dictionary(word) + "=" + word + " ] "));
             });
         }
     }
 
-    private static String dictionary(String word) {
+    private String dictionary(String word) {
 
-        if (word.startsWith("\""))
-            return "String: " + word;
+        if (word.startsWith("\"") && word.endsWith("\"") && word.length() > 2)
+            return "String found";
+
+        String toReturn;
 
         switch (word) {
             case "(":
             case ")":
-                return "parenthesis";
+                toReturn = "parenthesis";
+                break;
 
             case "{":
             case "}":
-                return "curly-brackets";
+                toReturn = "curly-brackets";
+                break;
+
+            case "[":
+            case "]":
+                toReturn = "square-brackets";
+                break;
 
             case ";":
-                return "semicolon";
+                toReturn = "semicolon";
+                break;
+
+            case CLASS:
+                toReturn = CLASS;
+                break;
 
             case "imp":
             case "while":
             case "print":
             case "if":
             case "else":
-                return "command";
+                toReturn = "command";
+                break;
 
             case "System.out.println":
-                return "print";
+                toReturn = "print";
+                break;
 
-            case "public static void main":
-                return "acessor-modifier";
+            case "public":
+            case "private":
+            case "protected":
+                toReturn = "acessor-modifier";
+                break;
 
             case "int":
             case "Int":
             case "Float":
             case "String":
-            case "String[]":
             case "boolean":
             case "Boolean":
-                return "type";
+            case "static":
+            case "void":
+                toReturn = "type";
+                specialCase = true;
+                break;
+
+            case "main":
+                toReturn = "main-method";
+                break;
 
             case "*":
             case "+":
             case "/":
             case "-":
-                return "operation";
+                toReturn = "operation";
+                break;
+
+            case " ":
+                toReturn = "space";
+                break;
 
             default:
-                return "unexpected";
+                toReturn = UNEXPECTED;
         }
+
+        return toReturn;
     }
 
 
     public List<String> interactOverLine(String line) {
-
+        specialCase = false;
         List<String> result = new ArrayList<>();
-
         StringBuilder temp = new StringBuilder();
-        boolean special = false;
 
         for (int charPos = 0; charPos < line.length(); charPos++) {
             temp.append(line.charAt(charPos));
 
-            switch (line.charAt(charPos)) {
-                case '{':
-                case '}':
-                case ' ':
-                case ';':
-                case '(':
-                case ')':
-                    special = true;
-                    break;
-                default:
-                    break;
-            }
+            if (!UNEXPECTED.equals(dictionary(String.valueOf(temp).trim()))) {
 
+//                if (dictionary(String.valueOf(temp).trim()).equals("type") && dictionary(String.valueOf(line.charAt(getNextValidCharacter(charPos, line)))).equals("square-brackets")) {
+//
+//                } else {
 
-//            System.out.println(dictionary(String.valueOf(temp)));
-//            System.out.println("palavra =" + temp);
-            if (special && !"unexpected".equals(dictionary(String.valueOf(temp)))) {
-//                System.out.println("Palavra existe no dicionário =" + temp);
+                result.add(String.valueOf(temp).trim());
 
-                result.add(String.valueOf(temp));
                 temp = new StringBuilder();
-                special = false;
+//                }
+            } else if (!result.isEmpty() && result.get(result.size() - 1).equals(CLASS) && temp.length() > 1
+                    && (line.charAt(charPos) == '{' || line.charAt(charPos) == ' ')) {
+                result.add(String.valueOf(temp.substring(0, temp.length() - 1)).trim());
+                temp = new StringBuilder();
+                if (line.charAt(charPos) == '{')
+                    result.add("{");
+            } else if (specialCase && (line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
+                if (line.charAt(charPos) == ')') {
+                    charPos--;
+                }
+                result.add(String.valueOf(temp).trim());
+                temp = new StringBuilder();
+                specialCase = false;
             }
 
         }
         return result;
+    }
+
+    private int getNextValidCharacter(int charPos, String line) {
+
+        for (; charPos < line.length(); charPos++) {
+
+            if (line.charAt(charPos) != ' ') {
+                return charPos;
+            }
+        }
+        return charPos;
     }
 }
