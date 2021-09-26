@@ -35,6 +35,10 @@ public class LexicalProcessor {
         if (word.startsWith("\"") && word.endsWith("\"") && word.length() > 2)
             return "String found";
 
+        if (word.matches("[0-9]")){
+            return "number";
+        }
+
         String toReturn;
 
         switch (word) {
@@ -99,6 +103,7 @@ public class LexicalProcessor {
             case "+":
             case "/":
             case "-":
+            case "=":
                 toReturn = "operation";
                 break;
 
@@ -133,8 +138,8 @@ public class LexicalProcessor {
 
                 if (line.charAt(charPos) == '{')
                     result.add("{");
-            } else if (specialCase && (line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
-                if (line.charAt(charPos) == ')') {
+            } else if (specialCase && (line.charAt(charPos) == ';'|| line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
+                if (!dictionary(String.valueOf(line.charAt(charPos))).equals(UNEXPECTED)) {
                     charPos--;
                 }
 
