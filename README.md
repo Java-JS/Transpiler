@@ -1,12 +1,12 @@
 # Transpiler
 
-Implementação de um compilador com as seguintes funcionalidades: 
+Implementação de um transpiler de Java para JS, com as seguintes fases: 
 *Análise Léxica; 
 *Análise Sintática; 
 *Análise Semântica;
 *Gerador de código; 
 
-O compilador deve ser capaz de trabalhar com códigos que contenham: 
+Capaz de trabalhar com: 
 *Declaração e atribuição de variáveis; 
 *Entrada e Saída de Dados; 
 *Repetição; 
