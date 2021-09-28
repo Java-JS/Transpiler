@@ -31,57 +31,46 @@ public class LexicalProcessor {
     }
 
     private String dictionary(String word) {
-
         if (word.startsWith("\"") && word.endsWith("\"") && word.length() > 2)
             return "String found";
 
-        if (word.matches("[0-9]")){
+        if (word.matches("[0-9]")) {
             return "number";
         }
-
-        String toReturn;
 
         switch (word) {
             case "(":
             case ")":
-                toReturn = "parenthesis";
-                break;
+                return "parenthesis";
 
             case "{":
             case "}":
-                toReturn = "curly-brackets";
-                break;
+                return "curly-brackets";
 
             case "[":
             case "]":
-                toReturn = "square-brackets";
-                break;
+                return "square-brackets";
 
             case ";":
-                toReturn = "semicolon";
-                break;
+                return "semicolon";
 
             case CLASS:
-                toReturn = CLASS;
-                break;
+                return CLASS;
 
             case "imp":
             case "while":
             case "print":
             case "if":
             case "else":
-                toReturn = "command";
-                break;
+                return "command";
 
             case "System.out.println":
-                toReturn = "print";
-                break;
+                return "print";
 
             case "public":
             case "private":
             case "protected":
-                toReturn = "acessor-modifier";
-                break;
+                return "acessor-modifier";
 
             case "int":
             case "Int":
@@ -91,33 +80,26 @@ public class LexicalProcessor {
             case "Boolean":
             case "static":
             case "void":
-                toReturn = "type";
                 specialCase = true;
-                break;
+                return "type";
 
             case "main":
-                toReturn = "main-method";
-                break;
+                return "main-method";
 
             case "*":
             case "+":
             case "/":
             case "-":
             case "=":
-                toReturn = "operation";
-                break;
+                return "operation";
 
             case " ":
-                toReturn = "space";
-                break;
+                return "space";
 
             default:
-                toReturn = UNEXPECTED;
+                return UNEXPECTED;
         }
-
-        return toReturn;
     }
-
 
     public List<String> interactOverLine(String line) {
         specialCase = false;
@@ -138,7 +120,7 @@ public class LexicalProcessor {
 
                 if (line.charAt(charPos) == '{')
                     result.add("{");
-            } else if (specialCase && (line.charAt(charPos) == ';'|| line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
+            } else if (specialCase && (line.charAt(charPos) == ';' || line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
                 if (!dictionary(String.valueOf(line.charAt(charPos))).equals(UNEXPECTED)) {
                     charPos--;
                 }
