@@ -23,8 +23,8 @@ public class LexicalProcessor {
             System.out.println("\nLINE: " + line);
 
             interactOverLine(line).forEach(word -> {
-                System.out.println("[FRAG: " + dictionary(word) + "=" + word + " ] ");
-                lexemes.add(("[FRAG: " + dictionary(word) + "=" + word + " ] "));
+                System.out.println("[FRAG: " + dictionary(word) + "=" + word + "]");
+                lexemes.add(("[FRAG: " + dictionary(word) + "=" + word + "]"));
             });
         }
         return lexemes;
@@ -70,7 +70,7 @@ public class LexicalProcessor {
             case "public":
             case "private":
             case "protected":
-                return "acessor-modifier";
+                return "accessor-modifier";
 
             case "int":
             case "Int":
