@@ -10,7 +10,7 @@ public class LexicalProcessor {
     boolean specialCase = false;
     private List<String> lexemes = new ArrayList<>();
 
-    public List<String> interact(List<String> javaFile) {
+    public List<String> interact(final List<String> javaFile) {
 
         if (javaFile == null) {
             System.err.println("ERRO! Não há entradas válidas.");
@@ -23,14 +23,14 @@ public class LexicalProcessor {
             System.out.println("\nLINE: " + line);
 
             interactOverLine(line).forEach(word -> {
-                System.out.println("[FRAG: " + dictionary(word) + "=" + word + "]");
-                lexemes.add(("[FRAG: " + dictionary(word) + "=" + word + "]"));
+                System.out.println("[FRAG: " + syntacticParser(word) + "=" + word + "]");
+                lexemes.add(("[FRAG: " + syntacticParser(word) + "=" + word + "]"));
             });
         }
         return lexemes;
     }
 
-    private String dictionary(String word) {
+    private String syntacticParser(String word) {
         if (word.startsWith("\"") && word.endsWith("\"") && word.length() > 2)
             return "String found";
 
@@ -109,7 +109,7 @@ public class LexicalProcessor {
         for (int charPos = 0; charPos < line.length(); charPos++) {
             temp.append(line.charAt(charPos));
 
-            if (!UNEXPECTED.equals(dictionary(String.valueOf(temp).trim()))) {
+            if (!UNEXPECTED.equals(syntacticParser(String.valueOf(temp).trim()))) {
                 result.add(String.valueOf(temp).trim());
                 temp = new StringBuilder();
 
@@ -121,7 +121,7 @@ public class LexicalProcessor {
                 if (line.charAt(charPos) == '{')
                     result.add("{");
             } else if (specialCase && (line.charAt(charPos) == ';' || line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
-                if (!dictionary(String.valueOf(line.charAt(charPos))).equals(UNEXPECTED)) {
+                if (!syntacticParser(String.valueOf(line.charAt(charPos))).equals(UNEXPECTED)) {
                     charPos--;
                 }
 
