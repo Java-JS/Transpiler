@@ -116,10 +116,10 @@ public class LexicalProcessor {
             } else if (!result.isEmpty() && result.get(result.size() - 1).equals(CLASS) && temp.length() > 1
                     && (line.charAt(charPos) == '{' || line.charAt(charPos) == ' ')) {
                 result.add(String.valueOf(temp.substring(0, temp.length() - 1)).trim());
-                temp = new StringBuilder();
 
                 if (line.charAt(charPos) == '{')
                     result.add("{");
+                temp = new StringBuilder();
             } else if (specialCase && (line.charAt(charPos) == ';' || line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
                 if (!syntacticParser(String.valueOf(line.charAt(charPos))).equals(UNEXPECTED)) {
                     charPos--;
