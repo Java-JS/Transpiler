@@ -6,6 +6,7 @@ public class Constants {
 
     public static final String UNEXPECTED = "unexpected";
     public static final String CLASS = "class";
+    public static final String MAIN_METHOD = "main_method";
     public static final String PARENTHESIS = "parenthesis";
     public static final String CURLY_BRACKETS = "curly_brackets";
     public static final String SQUARE_BRACKETS = "square_brackets";
