@@ -3,8 +3,7 @@ package transpiler.processors;
 import java.util.ArrayList;
 import java.util.List;
 
-import static transpiler.constants.Constants.CLASS;
-import static transpiler.constants.Constants.UNEXPECTED;
+import static transpiler.constants.Constants.*;
 
 public class LexicalProcessor {
     boolean specialCase = false;
@@ -35,24 +34,24 @@ public class LexicalProcessor {
             return "String found";
 
         if (word.matches("[0-9]")) {
-            return "number";
+            return NUMBER;
         }
 
         switch (word) {
             case "(":
             case ")":
-                return "parenthesis";
+                return PARENTHESIS;
 
             case "{":
             case "}":
-                return "curly-brackets";
+                return CURLY_BRACKETS;
 
             case "[":
             case "]":
-                return "square-brackets";
+                return SQUARE_BRACKETS;
 
             case ";":
-                return "semicolon";
+                return SEMICOLON;
 
             case CLASS:
                 return CLASS;
@@ -62,15 +61,15 @@ public class LexicalProcessor {
             case "print":
             case "if":
             case "else":
-                return "command";
+                return COMMAND;
 
             case "System.out.println":
-                return "print";
+                return PRINT;
 
             case "public":
             case "private":
             case "protected":
-                return "accessor-modifier";
+                return ACCESSOR_MODIFIER;
 
             case "int":
             case "Int":
@@ -81,20 +80,20 @@ public class LexicalProcessor {
             case "static":
             case "void":
                 specialCase = true;
-                return "type";
+                return TYPE;
 
             case "main":
-                return "main-method";
+                return MAIN_METHOD;
 
             case "*":
             case "+":
             case "/":
             case "-":
             case "=":
-                return "operation";
+                return OPERATION;
 
             case " ":
-                return "space";
+                return SPACE;
 
             default:
                 return UNEXPECTED;
