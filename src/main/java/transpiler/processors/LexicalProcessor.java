@@ -1,5 +1,7 @@
 package transpiler.processors;
 
+import transpiler.model.Lexeme;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +9,9 @@ import static transpiler.constants.Constants.*;
 
 public class LexicalProcessor {
     boolean specialCase = false;
-    private List<String> lexemes = new ArrayList<>();
+    private final List<Lexeme> lexemes = new ArrayList<>();
 
-    public List<String> interact(final List<String> javaFile) {
+    public List<Lexeme> interact(final List<String> javaFile) {
 
         if (javaFile == null) {
             System.err.println("ERRO! Não há entradas válidas.");
@@ -17,15 +19,16 @@ public class LexicalProcessor {
         }
 
         for (String line : javaFile) {
-            line = line.trim();
+            System.out.println("\nLINE: " + line.trim());
 
-            System.out.println("\nLINE: " + line);
-
-            interactOverLine(line).forEach(word -> {
-                System.out.println("[FRAG: " + syntacticParser(word) + "=" + word + "]");
-                lexemes.add(("[FRAG: " + syntacticParser(word) + "=" + word + "]"));
+            interactOverLine(line.trim()).forEach(word -> {
+                lexemes.add(Lexeme.builder().type(syntacticParser(word)).command(word).build());
+                System.out.println(lexemes.get(lexemes.size() -1));
             });
         }
+
+        System.out.println(lexemes);
+
         return lexemes;
     }
 
