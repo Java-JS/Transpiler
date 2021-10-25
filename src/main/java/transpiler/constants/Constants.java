@@ -18,4 +18,5 @@ public class Constants {
     public static final String SPACE = "space";
     public static final String OPERATION = "operation";
     public static final String ACCESSOR_MODIFIER = "accessor_modifier";
+    public static final String STRING_FOUND = "string_found";
 }
