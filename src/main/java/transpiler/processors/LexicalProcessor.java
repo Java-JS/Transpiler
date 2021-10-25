@@ -12,29 +12,20 @@ public class LexicalProcessor {
     private final List<Lexeme> lexemes = new ArrayList<>();
 
     public List<Lexeme> interact(final List<String> javaFile) {
-
         if (javaFile == null) {
             System.err.println("ERRO! Não há entradas válidas.");
             return new ArrayList<>();
         }
 
-        for (String line : javaFile) {
-            System.out.println("\nLINE: " + line.trim());
-
-            interactOverLine(line.trim()).forEach(word -> {
-                lexemes.add(Lexeme.builder().type(syntacticParser(word)).command(word).build());
-                System.out.println(lexemes.get(lexemes.size() -1));
-            });
-        }
-
-        System.out.println(lexemes);
+        javaFile.forEach(line -> interactOverLine(line.trim()).forEach(word ->
+                lexemes.add(Lexeme.builder().type(syntacticParser(word)).command(word).build())));
 
         return lexemes;
     }
 
     private String syntacticParser(String word) {
         if (word.startsWith("\"") && word.endsWith("\"") && word.length() > 2)
-            return "String found";
+            return STRING_FOUND;
 
         if (word.matches("[0-9]")) {
             return NUMBER;
