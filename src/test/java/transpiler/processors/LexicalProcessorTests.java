@@ -6,6 +6,8 @@ import transpiler.model.Lexeme;
 
 import java.util.List;
 
+import static transpiler.constants.Constants.*;
+
 class LexicalProcessorTests {
     LexicalProcessor lexicalProcessor = new LexicalProcessor();
 
@@ -22,24 +24,24 @@ class LexicalProcessorTests {
     @Test
     void testHelloWorldFragments() {
         Assertions.assertEquals(List.of(
-                        Lexeme.builder().type("print").command("System.out.println").build(),
-                        Lexeme.builder().type("parenthesis").command("(").build(),
-                        Lexeme.builder().type("String found").command("\"Hello World!\"").build(),
-                        Lexeme.builder().type("parenthesis").command(")").build(),
-                        Lexeme.builder().type("semicolon").command(";").build()),
+                        Lexeme.builder().type(PRINT).command("System.out.println").build(),
+                        Lexeme.builder().type(PARENTHESIS).command("(").build(),
+                        Lexeme.builder().type(STRING_FOUND).command("\"Hello World!\"").build(),
+                        Lexeme.builder().type(PARENTHESIS).command(")").build(),
+                        Lexeme.builder().type(SEMICOLON).command(";").build()),
                 lexicalProcessor.interact(List.of("System.out.println(\"Hello World!\");")));
     }
 
     @Test
     void testStringWithPlusSymbol() {
         Assertions.assertEquals(List.of(
-                        Lexeme.builder().type("print").command("System.out.println").build(),
-                        Lexeme.builder().type("parenthesis").command("(").build(),
-                        Lexeme.builder().type("String found").command("\"Hello World!\"").build(),
-                        Lexeme.builder().type("operation").command("+").build(),
-                        Lexeme.builder().type("String found").command("\"random\"").build(),
-                        Lexeme.builder().type("parenthesis").command(")").build(),
-                        Lexeme.builder().type("semicolon").command(";").build()),
+                        Lexeme.builder().type(PRINT).command("System.out.println").build(),
+                        Lexeme.builder().type(PARENTHESIS).command("(").build(),
+                        Lexeme.builder().type(STRING_FOUND).command("\"Hello World!\"").build(),
+                        Lexeme.builder().type(OPERATION).command("+").build(),
+                        Lexeme.builder().type(STRING_FOUND).command("\"random\"").build(),
+                        Lexeme.builder().type(PARENTHESIS).command(")").build(),
+                        Lexeme.builder().type(SEMICOLON).command(";").build()),
                 lexicalProcessor.interact(List.of("System.out.println(\"Hello World!\" + \"random\");")));
     }
 }
