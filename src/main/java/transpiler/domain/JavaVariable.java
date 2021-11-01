@@ -1,4 +1,4 @@
-package transpiler.model;
+package transpiler.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,8 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class VarJS {
+public class JavaVariable {
     private String name;
+    private String type;
     private String allocation;
 }
