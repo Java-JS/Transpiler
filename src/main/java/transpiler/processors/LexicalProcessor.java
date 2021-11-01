@@ -1,6 +1,7 @@
 package transpiler.processors;
 
-import transpiler.model.Lexeme;
+import transpiler.domain.Lexeme;
+import transpiler.enumerator.LexemeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,53 +18,61 @@ public class LexicalProcessor {
             return new ArrayList<>();
         }
 
-        javaFile.forEach(line -> interactOverLine(line.trim()).forEach(word ->
-                lexemes.add(Lexeme.builder().type(syntacticParser(word)).command(word).build())));
+        javaFile.forEach(line -> {
+            System.out.println("\n" + line.trim());
+            interactOverLine(line.trim()).forEach(word -> {
+                lexemes.add(Lexeme.builder().type(syntacticParser(word)).command(word).build());
+                System.out.println(lexemes.get(lexemes.size() - 1));
+            });
+        });
+
+//        javaFile.forEach(line -> interactOverLine(line.trim()).forEach(word ->
+//                lexemes.add(Lexeme.builder().type(syntacticParser(word)).command(word).build())));
 
         return lexemes;
     }
 
-    private String syntacticParser(String word) {
+    private LexemeType syntacticParser(String word) {
         if (word.startsWith("\"") && word.endsWith("\"") && word.length() > 2)
-            return STRING_FOUND;
+            return LexemeType.STRING_FOUND;
 
         if (word.matches("[0-9]")) {
-            return NUMBER;
+            return LexemeType.NUMBER;
         }
 
         switch (word) {
             case "(":
             case ")":
-                return PARENTHESIS;
+                return LexemeType.PARENTHESIS;
 
             case "{":
             case "}":
-                return CURLY_BRACKETS;
+                return LexemeType.CURLY_BRACKETS;
 
             case "[":
             case "]":
-                return SQUARE_BRACKETS;
+                return LexemeType.SQUARE_BRACKETS;
 
             case ";":
-                return SEMICOLON;
+                return LexemeType.SEMICOLON;
 
             case CLASS:
-                return CLASS;
+                return LexemeType.CLASS;
 
             case "imp":
             case "while":
             case "print":
             case "if":
             case "else":
-                return COMMAND;
+                return LexemeType.COMMAND;
 
             case "System.out.println":
-                return PRINT;
+                return LexemeType.PRINT;
 
             case "public":
             case "private":
             case "protected":
-                return ACCESSOR_MODIFIER;
+                return LexemeType.ACCESSOR_MODIFIER;
 
             case "int":
             case "Int":
@@ -74,23 +83,23 @@ public class LexicalProcessor {
             case "static":
             case "void":
                 specialCase = true;
-                return TYPE;
+                return LexemeType.TYPE;
 
             case "main":
-                return MAIN_METHOD;
+                return LexemeType.MAIN_METHOD;
 
             case "*":
             case "+":
             case "/":
             case "-":
             case "=":
-                return OPERATION;
+                return LexemeType.OPERATION;
 
             case " ":
-                return SPACE;
+                return LexemeType.SPACE;
 
             default:
-                return UNEXPECTED;
+                return LexemeType.UNEXPECTED;
         }
     }
 
@@ -102,7 +111,7 @@ public class LexicalProcessor {
         for (int charPos = 0; charPos < line.length(); charPos++) {
             temp.append(line.charAt(charPos));
 
-            if (!UNEXPECTED.equals(syntacticParser(String.valueOf(temp).trim()))) {
+            if (!LexemeType.UNEXPECTED.equals(syntacticParser(String.valueOf(temp).trim()))) {
                 result.add(String.valueOf(temp).trim());
                 temp = new StringBuilder();
 
@@ -115,7 +124,7 @@ public class LexicalProcessor {
                 temp = new StringBuilder();
 
             } else if (specialCase && (line.charAt(charPos) == ';' || line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
-                if (!syntacticParser(String.valueOf(line.charAt(charPos))).equals(UNEXPECTED)) {
+                if (!syntacticParser(String.valueOf(line.charAt(charPos))).equals(LexemeType.UNEXPECTED)) {
                     charPos--;
                 }
 
