@@ -24,7 +24,14 @@ public class SemanticProcessor {
                     }
                 }
             }
+
+            if (lexemes.get(i - 1).getType() != LexemeType.CLASS) {
+                if (lexemes.get(i).getType().equals(LexemeType.TYPE)) {
+                    System.out.println();
+                }
+            }
         }
+
         // TODO check if the variable was already declared or not declared
         // TODO check variable type if matches the content
         // TODO check if the var is inside a class
