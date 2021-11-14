@@ -18,16 +18,18 @@ public class SemanticProcessor {
         for (int i = 0; i < lexemes.size(); i++) {
 
             if (lexemes.get(i).getType().equals(LexemeType.CLASS)) {
-                if (lexemes.get(i - 1).getCommand().equals("public")) {
+                if (i >= 1 && lexemes.get(i - 1).getCommand().equals("public")) {
                     if (lexemes.get(i + 1).getType().equals(LexemeType.UNEXPECTED)) {
                         System.out.println("Class found!");
+                        System.out.println(lexemes.get(i));
+
                     }
                 }
             }
 
-            if (lexemes.get(i - 1).getType() != LexemeType.CLASS) {
-                if (lexemes.get(i).getType().equals(LexemeType.TYPE)) {
-                    System.out.println();
+            if (lexemes.get(i).getType() != LexemeType.TYPE) {
+                if (i >= 1 && lexemes.get(i - 1).getType().equals(LexemeType.CLASS)) {
+                    System.out.println(lexemes.get(i));
                 }
             }
         }
@@ -43,7 +45,7 @@ public class SemanticProcessor {
     public static void main(String[] args) {
         List<Lexeme> test = new ArrayList<>();
         test.add(Lexeme.builder().type(LexemeType.ACCESSOR_MODIFIER).command("public").build());
-        test.add(Lexeme.builder().type(LexemeType.CLASS).command(CLASS).build());
+        test.add(Lexeme.builder().type(LexemeType.CLASS).command("class").build());
         test.add(Lexeme.builder().type(LexemeType.UNEXPECTED).command("ClassTest").build());
 
         execution(test);
