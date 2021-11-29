@@ -10,6 +10,7 @@ import static transpiler.constants.Constants.*;
 
 public class LexicalProcessor {
     boolean specialCase = false;
+    private String scan;
     private final List<Lexeme> lexemes = new ArrayList<>();
 
     public List<Lexeme> interact(final List<String> javaFile) {
@@ -45,6 +46,9 @@ public class LexicalProcessor {
 
         if (word.equals("\n"))
             return LexemeType.LINE_FEED;
+
+        if (word.equals(scan))
+            return LexemeType.SCANNER_IMPL;
 
         switch (word) {
             case "(", ")":
@@ -102,6 +106,9 @@ public class LexicalProcessor {
             case "//":
                 return LexemeType.COMMENT;
 
+            case "reader":
+                return LexemeType.SCANNER_NEXT;
+
             default:
                 return LexemeType.UNEXPECTED;
         }
@@ -128,6 +135,19 @@ public class LexicalProcessor {
 
             if (!LexemeType.UNEXPECTED.equals(syntacticParser(String.valueOf(temp).trim()))) {
                 result.add(String.valueOf(temp).trim());
+                temp = new StringBuilder();
+
+
+            } else if (!result.isEmpty() && result.get(result.size() - 1).equals(LexemeType.SCANNER.getType()) && (line.charAt(charPos) == ' ') && temp.length() > 1 && syntacticParser(String.valueOf(temp).trim()).equals(LexemeType.UNEXPECTED)) {
+                scan = String.valueOf(temp.substring(0, temp.length() - 1)).trim();
+                result.add(scan);
+
+                temp = new StringBuilder();
+
+            } else if (String.valueOf(temp).trim().equals("nextInt") || String.valueOf(temp).trim().equals("nextDouble") || String.valueOf(temp).trim().equals("nextDouble")) {
+
+                result.add("reader");
+                charPos = line.length() - 2;
                 temp = new StringBuilder();
 
             } else if (!result.isEmpty() && result.get(result.size() - 1).equals(CLASS) && temp.length() > 1

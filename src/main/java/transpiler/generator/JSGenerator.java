@@ -88,6 +88,10 @@ public class JSGenerator {
                     file.write("const prompt = require('prompt-sync')({sigint: true});\n");
                     break;
 
+                case SCANNER_NEXT:
+                    file.write("prompt('')");
+                    break;
+
                 default:
                     System.out.println("Is this really need? " + lexemes.get(i).getCommand());
             }

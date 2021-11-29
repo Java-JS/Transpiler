@@ -21,9 +21,11 @@ public enum LexemeType {
     VARIABLE("variable"),
     LINE_FEED("line_feed"),
     JAVA_IMPORT("java_import"),
-    SCANNER("scanner"),
+    SCANNER("Scanner"),
+    SCANNER_IMPL("scanner_impl"),
     NEW("new"),
-    COMMENT("comment");
+    COMMENT("comment"),
+    SCANNER_NEXT("reader");
 
     private final String type;
 
