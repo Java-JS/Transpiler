@@ -40,6 +40,9 @@ public class LexicalProcessor {
             return LexemeType.NUMBER;
         }
 
+//        if (word.startsWith("¬") && word.length() > 1)
+//            return LexemeType.VARIABLE;
+
         switch (word) {
             case "(":
             case ")":
@@ -64,6 +67,7 @@ public class LexicalProcessor {
             case "print":
             case "if":
             case "else":
+            case "&&":
                 return LexemeType.COMMAND;
 
             case "System.out.println":
@@ -93,10 +97,15 @@ public class LexicalProcessor {
             case "/":
             case "-":
             case "=":
+            case "<":
+            case ">":
                 return LexemeType.OPERATION;
 
             case " ":
                 return LexemeType.SPACE;
+
+            case ".":
+                return LexemeType.POINT;
 
             default:
                 return LexemeType.UNEXPECTED;
@@ -123,12 +132,21 @@ public class LexicalProcessor {
                     result.add("{");
                 temp = new StringBuilder();
 
-            } else if (specialCase && (line.charAt(charPos) == ';' || line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
-                if (!syntacticParser(String.valueOf(line.charAt(charPos))).equals(LexemeType.UNEXPECTED)) {
+            } else if ((line.charAt(charPos) == ';' || line.charAt(charPos) == ' ' || line.charAt(charPos) == ')') && temp.length() > 1) {
+                if (!syntacticParser(String.valueOf(line.charAt(charPos))).equals(LexemeType.UNEXPECTED) && temp.charAt(0) != '"') {
+
+                    result.add(temp.substring(0, temp.length() - 1).trim());
+
                     charPos--;
+                    temp = new StringBuilder();
                 }
 
-                result.add(String.valueOf(temp).trim());
+                if (temp.toString().length() > 1 && temp.charAt(0) == '"')
+                    continue;
+
+                if (!"".equals((String.valueOf(temp.substring(0, temp.length())).trim())))
+                    result.add(String.valueOf(temp).trim());
+
                 temp = new StringBuilder();
                 specialCase = false;
             }
