@@ -75,7 +75,7 @@ public class LexicalProcessor {
             case "public", "private", "protected":
                 return LexemeType.ACCESSOR_MODIFIER;
 
-            case "int", "Int", "Float", "String", "boolean", "Boolean ", "static":
+            case "int", "Int", "Float", "String", "boolean", "Boolean ", "Double", "double", "static":
                 specialCase = true;
                 return LexemeType.TYPE;
 

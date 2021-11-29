@@ -9,7 +9,7 @@ public class HelloWorld {
 
         int a = 0;
 
-        int b = 3;
+        Double b = 3;
 
         if (a < b)
             System.out.println("Menor");
