@@ -15,14 +15,14 @@ public class HelloWorld {
             System.out.println("Menor");
 
         while (a < 5) {
-            System.out.println(a);
+            System.out.println("a=" + a);
             a++;
         }
 
         Scanner sc = new Scanner(System.in);
 
 
-        System.out.println("\nDigite uma entrada nova para A");
+        System.out.println("\nDigite uma entrada nova para a");
 
         a = sc.nextInt();
 
