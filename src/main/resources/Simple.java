@@ -22,6 +22,10 @@ public class HelloWorld {
         }
 
         Scanner sc = new Scanner(System.in);
+
+        a = sc.nextInt();
+
+
     }
 }
 
