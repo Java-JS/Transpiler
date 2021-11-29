@@ -15,7 +15,7 @@ class LexicalProcessorTests {
         Assertions.assertEquals(List.of("System.out.println",
                         "(",
                         "\"Hello World!\"",
-                        "a",
+                        ")",
                         ";"),
                 lexicalProcessor.interactOverLine("System.out.println(\"Hello World!\");"));
     }
@@ -45,7 +45,7 @@ class LexicalProcessorTests {
     }
 
     @Test
-    void testInt() {
+    void checkIntDeclaration() {
         //   int y=32;
         Assertions.assertEquals(List.of(
                         Lexeme.builder().type(LexemeType.TYPE).command("int").build(),
@@ -57,9 +57,7 @@ class LexicalProcessorTests {
     }
 
     @Test
-    void testF() {
-        //  float price=2100.0
-        // teste reprovado por erro na linha 71, onde o codigo não está considerando o ponto
+    void checkFloatDeclaration() {
         Assertions.assertEquals(List.of(
                         Lexeme.builder().type(LexemeType.TYPE).command("Float").build(),
                         Lexeme.builder().type(LexemeType.UNEXPECTED).command("price").build(),
@@ -68,16 +66,13 @@ class LexicalProcessorTests {
                         Lexeme.builder().type(LexemeType.NUMBER).command("1").build(),
                         Lexeme.builder().type(LexemeType.NUMBER).command("0").build(),
                         Lexeme.builder().type(LexemeType.NUMBER).command("0").build(),
-                        Lexeme.builder().type(LexemeType.UNEXPECTED).command(".").build(),
+                        Lexeme.builder().type(LexemeType.POINT).command(".").build(),
                         Lexeme.builder().type(LexemeType.NUMBER).command("0").build()),
                 lexicalProcessor.interact(List.of("Float price = 2100.0")));
     }
 
     @Test
-    void test4() {
-        // float price=650.5
-        // teste reprovado por erro na linha 88, onde o codigo não está considerando o ponto
-
+    void checkFloatDeclaration2() {
         Assertions.assertEquals(List.of(
                         Lexeme.builder().type(LexemeType.TYPE).command("Float").build(),
                         Lexeme.builder().type(LexemeType.UNEXPECTED).command("price").build(),
@@ -85,50 +80,32 @@ class LexicalProcessorTests {
                         Lexeme.builder().type(LexemeType.NUMBER).command("6").build(),
                         Lexeme.builder().type(LexemeType.NUMBER).command("5").build(),
                         Lexeme.builder().type(LexemeType.NUMBER).command("0").build(),
-                        Lexeme.builder().type(LexemeType.UNEXPECTED).command(".").build(),
+                        Lexeme.builder().type(LexemeType.POINT).command(".").build(),
                         Lexeme.builder().type(LexemeType.NUMBER).command("5").build()),
                 lexicalProcessor.interact(List.of("Float price = 650.5")));
     }
 
     @Test
-    void test5(){
-
-     //   if (horario > 5 && horario <= 12) {System.out.println("Bom dia");
+    void checkConditionsAndHelloWorld() {
         Assertions.assertEquals(List.of(
-                Lexeme.builder().type(LexemeType.COMMAND).command("if").build(),
-                Lexeme.builder().type(LexemeType.SPACE).command(" ").build(),
-                Lexeme.builder().type(LexemeType.PARENTHESIS).command("(").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("h").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("o").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("r").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("a").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("r").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("i").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("o").build(),
-                Lexeme.builder().type(LexemeType.SPACE).command(" ").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command(">").build(),
-                Lexeme.builder().type(LexemeType.NUMBER).command("5").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("&&").build(),
-                Lexeme.builder().type(LexemeType.SPACE).command(" ").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("h").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("o").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("r").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("a").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("r").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("i").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("o").build(),
-                Lexeme.builder().type(LexemeType.UNEXPECTED).command("<").build(),
-                Lexeme.builder().type(LexemeType.OPERATION).command("=").build(),
-                Lexeme.builder().type(LexemeType.NUMBER).command("1").build(),
-                Lexeme.builder().type(LexemeType.NUMBER).command("2").build(),
-                Lexeme.builder().type(LexemeType.PARENTHESIS).command(")").build(),
-                Lexeme.builder().type(LexemeType.SPACE).command(" ").build(),
-                Lexeme.builder().type(LexemeType.CURLY_BRACKETS).command("{").build(),
-                Lexeme.builder().type(LexemeType.PRINT).command("System.out.println").build(),
-                Lexeme.builder().type(LexemeType.PARENTHESIS).command("(").build(),
-                Lexeme.builder().type(LexemeType.STRING_FOUND).command("\"Bom dia\"").build(),
-                Lexeme.builder().type(LexemeType.PARENTHESIS).command(")").build(),
-                Lexeme.builder().type(LexemeType.SEMICOLON).command(";").build()),
+                        Lexeme.builder().type(LexemeType.COMMAND).command("if").build(),
+                        Lexeme.builder().type(LexemeType.PARENTHESIS).command("(").build(),
+                        Lexeme.builder().type(LexemeType.UNEXPECTED).command("horario").build(),
+                        Lexeme.builder().type(LexemeType.OPERATION).command(">").build(),
+                        Lexeme.builder().type(LexemeType.NUMBER).command("5").build(),
+                        Lexeme.builder().type(LexemeType.COMMAND).command("&&").build(),
+                        Lexeme.builder().type(LexemeType.UNEXPECTED).command("horario").build(),
+                        Lexeme.builder().type(LexemeType.OPERATION).command("<").build(),
+                        Lexeme.builder().type(LexemeType.OPERATION).command("=").build(),
+                        Lexeme.builder().type(LexemeType.NUMBER).command("1").build(),
+                        Lexeme.builder().type(LexemeType.NUMBER).command("2").build(),
+                        Lexeme.builder().type(LexemeType.PARENTHESIS).command(")").build(),
+                        Lexeme.builder().type(LexemeType.CURLY_BRACKETS).command("{").build(),
+                        Lexeme.builder().type(LexemeType.PRINT).command("System.out.println").build(),
+                        Lexeme.builder().type(LexemeType.PARENTHESIS).command("(").build(),
+                        Lexeme.builder().type(LexemeType.STRING_FOUND).command("\"Bom dia\"").build(),
+                        Lexeme.builder().type(LexemeType.PARENTHESIS).command(")").build(),
+                        Lexeme.builder().type(LexemeType.SEMICOLON).command(";").build()),
                 lexicalProcessor.interact(List.of("if (horario > 5 && horario <= 12) {System.out.println(\"Bom dia\");")));
-
+    }
 }
