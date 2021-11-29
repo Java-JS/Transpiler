@@ -13,6 +13,8 @@ public class LexicalProcessor {
     private final List<Lexeme> lexemes = new ArrayList<>();
 
     public List<Lexeme> interact(final List<String> javaFile) {
+        System.out.println("\n======LEXICAL/SYNTACTIC PROCESSOR======");
+
         if (javaFile == null) {
             System.err.println("ERRO! Não há entradas válidas.");
             return new ArrayList<>();
@@ -26,9 +28,6 @@ public class LexicalProcessor {
             });
         });
 
-//        javaFile.forEach(line -> interactOverLine(line.trim()).forEach(word ->
-//                lexemes.add(Lexeme.builder().type(syntacticParser(word)).command(word).build())));
-
         return lexemes;
     }
 
@@ -40,20 +39,21 @@ public class LexicalProcessor {
             return LexemeType.NUMBER;
         }
 
-//        if (word.startsWith("¬") && word.length() > 1)
-//            return LexemeType.VARIABLE;
+        if (word.equals("new Scanner(System.in);")) {
+            return LexemeType.SCANNER;
+        }
+
+        if (word.equals("\n"))
+            return LexemeType.LINE_FEED;
 
         switch (word) {
-            case "(":
-            case ")":
+            case "(", ")":
                 return LexemeType.PARENTHESIS;
 
-            case "{":
-            case "}":
+            case "{", "}":
                 return LexemeType.CURLY_BRACKETS;
 
-            case "[":
-            case "]":
+            case "[", "]":
                 return LexemeType.SQUARE_BRACKETS;
 
             case ";":
@@ -62,43 +62,26 @@ public class LexicalProcessor {
             case CLASS:
                 return LexemeType.CLASS;
 
-            case "imp":
-            case "while":
-            case "print":
-            case "if":
-            case "else":
-            case "&&":
+            case "while", "print", "if", "else", "&&":
                 return LexemeType.COMMAND;
 
             case "System.out.println":
                 return LexemeType.PRINT;
 
-            case "public":
-            case "private":
-            case "protected":
+            case "public", "private", "protected":
                 return LexemeType.ACCESSOR_MODIFIER;
 
-            case "int":
-            case "Int":
-            case "Float":
-            case "String":
-            case "boolean":
-            case "Boolean":
-            case "static":
-            case "void":
+            case "int", "Int", "Float", "String", "boolean", "Boolean ", "static":
                 specialCase = true;
                 return LexemeType.TYPE;
+
+            case "void":
+                return LexemeType.VOID;
 
             case "main":
                 return LexemeType.MAIN_METHOD;
 
-            case "*":
-            case "+":
-            case "/":
-            case "-":
-            case "=":
-            case "<":
-            case ">":
+            case "*", "+", "/", "-", "=", "<", ">":
                 return LexemeType.OPERATION;
 
             case " ":
@@ -106,6 +89,18 @@ public class LexicalProcessor {
 
             case ".":
                 return LexemeType.POINT;
+
+            case "import", "java.util.Scanner":
+                return LexemeType.JAVA_IMPORT;
+
+            case "Scanner":
+                return LexemeType.SCANNER;
+
+            case "new":
+                return LexemeType.NEW;
+
+            case "//":
+                return LexemeType.COMMENT;
 
             default:
                 return LexemeType.UNEXPECTED;
@@ -116,6 +111,17 @@ public class LexicalProcessor {
         specialCase = false;
         List<String> result = new ArrayList<>();
         StringBuilder temp = new StringBuilder();
+
+        if (line.trim().equals(""))
+            result.add("\n");
+
+        if (line.contains("= new Scanner(System.in);")) {
+            line = line.replace("= new Scanner(System.in);", "");
+        }
+
+        if (line.startsWith("//")) {
+            result.add("//");
+        }
 
         for (int charPos = 0; charPos < line.length(); charPos++) {
             temp.append(line.charAt(charPos));

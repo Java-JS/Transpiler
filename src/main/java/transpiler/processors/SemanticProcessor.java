@@ -16,7 +16,7 @@ public class SemanticProcessor {
 
         boolean insideClass = false;
 
-        System.out.println();
+        System.out.println("\n======SEMANTIC PROCESSOR======");
 
         for (int i = 0; i < lexemes.size(); i++) {
 
@@ -72,9 +72,9 @@ public class SemanticProcessor {
                                 default -> match = "error";
                             }
 
-                            if (lexemes.get(i + 2).getType().equals(LexemeType.NUMBER) && lexemes.get(i + 2).getType().getLexemeType().equals(match)){
+                            if (lexemes.get(i + 2).getType().equals(LexemeType.NUMBER) && lexemes.get(i + 2).getType().getType().equals(match)){
                                 System.out.println("That's ok! Number");
-                            } else if (lexemes.get(i + 2).getType().equals(LexemeType.STRING_FOUND) && lexemes.get(i + 2).getType().getLexemeType().toLowerCase().contains(match)){
+                            } else if (lexemes.get(i + 2).getType().equals(LexemeType.STRING_FOUND) && lexemes.get(i + 2).getType().getType().toLowerCase().contains(match)){
                                 System.out.println("That's ok! String");
                             } else System.out.println("ERROR!!! wrong assignation");
 

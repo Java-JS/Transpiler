@@ -1,5 +1,7 @@
 package transpiler.generator;
 
+import lombok.Builder;
+import lombok.Data;
 import transpiler.domain.Lexeme;
 
 import java.io.FileWriter;
@@ -7,19 +9,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import static transpiler.enumerator.LexemeType.JAVA_IMPORT;
-import static transpiler.enumerator.LexemeType.VOID;
+import static transpiler.enumerator.LexemeType.*;
 
-public class CodeGenerator {
+@Data
+@Builder
+public class JSGenerator {
 
-    public List<Lexeme> lexemes;
-
-    public CodeGenerator(List<Lexeme> lexeme) {
-        this.lexemes = lexeme;
-    }
-
-    public void generate() throws IOException {
-        System.out.println();
+    public static void generate(List<Lexeme> lexemes) throws IOException {
+        System.out.println("\n======JS GENERATOR======");
         FileWriter arq = new FileWriter("src/main/resources/resultado.js");
         PrintWriter file = new PrintWriter(arq);
         boolean onParenthesis = false;
@@ -27,6 +24,8 @@ public class CodeGenerator {
         boolean scannerDeclared = false;
 
         for (int i = 0; i < lexemes.size(); i++) {
+//        javaFile.forEach(line -> interactOverLine(line.trim()).forEach(word ->
+//                lexemes.add(Lexeme.builder().type(syntacticParser(word)).command(word).build())));
 
             switch (lexemes.get(i).getType()) {
 
@@ -81,6 +80,12 @@ public class CodeGenerator {
 
                 case SCANNER:
                     scannerDeclared = true;
+
+                    if (lexemes.get(i + 1).getType().equals(UNEXPECTED)) {
+                        lexemes.remove(i + 1);
+                    }
+
+                    file.write("const prompt = require('prompt-sync')({sigint: true});\n");
                     break;
 
                 default:
@@ -89,7 +94,7 @@ public class CodeGenerator {
 
         }
 
-        file.write("instance = new HelloWorld();\n");
+        file.write("\ninstance = new HelloWorld();\n");
         file.write("instance.main();");
 
         arq.close();

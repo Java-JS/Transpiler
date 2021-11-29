@@ -31,3 +31,8 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+
+
+/src/main/resources/node_modules/
+/src/main/resources/resultado.js
+/src/main/resources/package-lock.json

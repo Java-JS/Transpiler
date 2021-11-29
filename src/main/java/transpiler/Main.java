@@ -1,7 +1,7 @@
 package transpiler;
 
 import transpiler.domain.Lexeme;
-import transpiler.generator.CodeGenerator;
+import transpiler.generator.JSGenerator;
 import transpiler.processors.LexicalProcessor;
 import transpiler.processors.SemanticProcessor;
 
@@ -15,7 +15,7 @@ public class Main {
     private static Scanner fileContent;
 
     public static void main(String[] args) throws IOException {
-        String fileName = "HelloWorld";
+        String fileName = "Simple";
         openArchive(fileName);
         processContent(readFile());
         closeArchive();
@@ -27,8 +27,7 @@ public class Main {
 
         SemanticProcessor.execution(lexemes);
 
-        CodeGenerator codeGenerator = new CodeGenerator(lexemes);
-        codeGenerator.generate();
+        JSGenerator.generate(lexemes);
     }
 
     private static void openArchive(String fileName) {

@@ -18,15 +18,20 @@ public enum LexemeType {
     OPERATION("operation"),
     ACCESSOR_MODIFIER("accessor_modifier"),
     STRING_FOUND("string_found"),
-    VARIABLE("variable");
+    VARIABLE("variable"),
+    LINE_FEED("line_feed"),
+    JAVA_IMPORT("java_import"),
+    SCANNER("scanner"),
+    NEW("new"),
+    COMMENT("comment");
 
-    private final String lexemeType;
+    private final String type;
 
     LexemeType(String lexemeType)  {
-        this.lexemeType = lexemeType;
+        this.type = lexemeType;
     }
 
-    public String getLexemeType() {
-        return lexemeType;
+    public String getType() {
+        return type;
     }
 }

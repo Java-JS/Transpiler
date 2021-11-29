@@ -14,6 +14,6 @@ public class Lexeme {
 
     @Override
     public String toString() {
-        return "Lexeme[" + type.getLexemeType() + ", " + command + ']';
+        return "Lexeme[" + type.getType() + ", " + command + ']';
     }
 }
