@@ -1,6 +1,8 @@
 package transpiler;
 
+import transpiler.domain.Lexeme;
 import transpiler.processors.LexicalProcessor;
+import transpiler.processors.SemanticProcessor;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -20,7 +22,9 @@ public class Main {
 
     private static void processContent(List<String> file) {
         LexicalProcessor lexicalProcessor = new LexicalProcessor();
-        lexicalProcessor.interact(file);
+        List<Lexeme> lexemes = lexicalProcessor.interact(file);
+
+        SemanticProcessor.execution(lexemes);
     }
 
     private static void openArchive(String fileName) {
