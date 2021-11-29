@@ -12,10 +12,13 @@ public enum LexemeType {
     NUMBER("number"),
     COMMAND("command"),
     TYPE("type"),
+    VOID("void"),
     SPACE("space"),
+    POINT("point"),
     OPERATION("operation"),
     ACCESSOR_MODIFIER("accessor_modifier"),
-    STRING_FOUND("string_found");
+    STRING_FOUND("string_found"),
+    VARIABLE("variable");
 
     private final String lexemeType;
 
