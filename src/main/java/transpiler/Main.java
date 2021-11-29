@@ -1,6 +1,7 @@
 package transpiler;
 
 import transpiler.domain.Lexeme;
+import transpiler.generator.CodeGenerator;
 import transpiler.processors.LexicalProcessor;
 import transpiler.processors.SemanticProcessor;
 
@@ -13,18 +14,21 @@ import java.util.Scanner;
 public class Main {
     private static Scanner fileContent;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String fileName = "HelloWorld";
         openArchive(fileName);
         processContent(readFile());
         closeArchive();
     }
 
-    private static void processContent(List<String> file) {
+    private static void processContent(List<String> file) throws IOException {
         LexicalProcessor lexicalProcessor = new LexicalProcessor();
         List<Lexeme> lexemes = lexicalProcessor.interact(file);
 
         SemanticProcessor.execution(lexemes);
+
+        CodeGenerator codeGenerator = new CodeGenerator(lexemes);
+        codeGenerator.generate();
     }
 
     private static void openArchive(String fileName) {
