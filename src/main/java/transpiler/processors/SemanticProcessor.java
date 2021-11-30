@@ -13,6 +13,7 @@ public class SemanticProcessor {
     public static void execution(final List<Lexeme> lexemes) {
         List<String> execution = new ArrayList<>();
         List<JavaVariable> variables = new ArrayList<>();
+        int insideParenthesis = 0;
 
         boolean insideClass = false;
 
@@ -20,6 +21,10 @@ public class SemanticProcessor {
 
         for (int i = 0; i < lexemes.size(); i++) {
 
+            if (lexemes.get(i).getCommand().equals("("))
+                insideParenthesis++;
+            if (lexemes.get(i).getCommand().equals(")"))
+                insideParenthesis--;
 
             switch (lexemes.get(i).getType()) {
 
@@ -85,8 +90,78 @@ public class SemanticProcessor {
                             System.out.println("ERROR! The variable " + lexemes.get(i).getCommand() + " was not declared.");
                     }
                 }
-            }
 
+
+                case COMMAND -> {
+
+
+                    if (lexemes.get(i).getCommand().equals("if")) {
+
+                        if (lexemes.get(i + 1).getCommand().equals("(")) {
+                            if (lexemes.get(i + 2).getCommand().equals(")")) {
+                                System.out.println("ERROR! Nothing inside IF condition");
+                            }
+                        }
+                    }
+
+                    if (lexemes.get(i).getCommand().equals("while")) {
+                        if (lexemes.get(i + 1).getCommand().equals("(")) {
+                            if (lexemes.get(i + 2).getCommand().equals(")")) {
+                                System.out.println("ERROR! Nothing inside WHILE condition");
+                            }
+                        }
+
+                    }
+                }
+
+                case PARENTHESIS -> {
+                        if (lexemes.get(i).getCommand().equals(")")) {
+                        if (lexemes.get(i - 1).getType().equals(LexemeType.UNEXPECTED)) {
+
+                            if (lexemes.get(i - 1).getCommand().equals("@") || lexemes.get(i - 1).getCommand().equals("$")) {
+                                System.out.println("Invalid symbol!" + " " + lexemes.get(i - 1).getCommand());
+                            } else if (!elementExistsOnVariables(variables, lexemes.get(i - 1).getCommand())) {
+                                System.out.println("ERROR! Variable doesn't exist. " + lexemes.get(i - 1).getCommand());
+                            }
+
+                            if (lexemes.get(i - 2).getType().equals(LexemeType.UNEXPECTED)) {
+
+                                if (lexemes.get(i - 2).getCommand().equals("@") || lexemes.get(i - 2).getCommand().equals("$")) {
+                                    System.out.println("Invalid symbol!" + " " + lexemes.get(i - 2).getCommand());
+
+                                } else if (!elementExistsOnVariables(variables, lexemes.get(i - 2).getCommand())) {
+                                    System.out.println("ERROR! Variable doesn't exist. " + lexemes.get(i - 2).getCommand());
+                                }
+                            }
+
+                            if (i > 2 && lexemes.get(i - 3).getType().equals(LexemeType.UNEXPECTED)) {
+
+                                if (lexemes.get(i - 3).getCommand().equals("@") || lexemes.get(i - 3).getCommand().equals("$")) {
+                                    System.out.println("Invalid symbol!" + " " + lexemes.get(i - 3).getCommand());
+                                } else if (!elementExistsOnVariables(variables, lexemes.get(i - 3).getCommand())) {
+                                    System.out.println("ERROR! Variable doesn't exist. " + lexemes.get(i - 3).getCommand());
+                                }
+                            }
+
+                            if (i > 3 && lexemes.get(i - 4).getType().equals(LexemeType.UNEXPECTED)) {
+
+                                if (lexemes.get(i - 4).getCommand().equals("@") || lexemes.get(i - 4).getCommand().equals("$")) {
+                                    System.out.println("Invalid symbol!" + " " + lexemes.get(i - 4).getCommand());
+                                } else if (!elementExistsOnVariables(variables, lexemes.get(i - 4).getCommand())) {
+                                    System.out.println("ERROR! Variable doesn't exist. " + lexemes.get(i - 4).getCommand());
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+        if (insideParenthesis != 0){
+            System.out.println("Parenthesis wasn't closed properly");
         }
     }
 
